@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=5 format=3 uid="uid://qn1xmdeydojg"]
+
+[ext_resource type="PackedScene" uid="uid://bwpwlhnv8njmh" path="res://levels/dr_wsw/objects/O_little_rock_mole.tscn" id="1_16da8"]
+[ext_resource type="PackedScene" uid="uid://ci282lu8t32mp" path="res://resources/mario/mario_sprite_mole.tscn" id="1_jxtus"]
+[ext_resource type="AudioStream" uid="uid://c3j05lio347wj" path="res://levels/dr_wsw/objects/SE_mole_shoot.ogg" id="2_u11av"]
+[ext_resource type="Script" path="res://levels/dr_wsw/scripts/MarioStatusMole.cs" id="3_x3rnd"]
+
+[resource]
+script = ExtResource("3_x3rnd")
+Projectile = ExtResource("1_16da8")
+ShootSound = ExtResource("2_u11av")
+Id = &"mole"
+Size = 0
+AnimationNode = ExtResource("1_jxtus")

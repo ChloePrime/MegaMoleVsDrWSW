@@ -1,0 +1,156 @@
+[gd_scene load_steps=7 format=3 uid="uid://ci282lu8t32mp"]
+
+[ext_resource type="PackedScene" uid="uid://u3mnx4topf7v" path="res://resources/mario/mario_sprite_prefab.tscn" id="1_fxqja"]
+[ext_resource type="Texture2D" uid="uid://rfee0x8amo4c" path="res://resources/enemies/T_mole.png" id="2_s668g"]
+[ext_resource type="Texture2D" uid="uid://co35iqkb563hw" path="res://resources/enemies/T_mole_jumping.png" id="4_bx2o4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mtqxc"]
+atlas = ExtResource("2_s668g")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b22kr"]
+atlas = ExtResource("2_s668g")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sxc57"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mtqxc")
+}],
+"loop": true,
+"name": &"[00] stopped",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mtqxc")
+}],
+"loop": true,
+"name": &"[00g] grabbing-stop",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mtqxc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b22kr")
+}],
+"loop": true,
+"name": &"[01] walking",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b22kr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mtqxc")
+}],
+"loop": true,
+"name": &"[01g] grabbing-walk",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b22kr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mtqxc")
+}],
+"loop": true,
+"name": &"[02] running",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b22kr")
+}],
+"loop": true,
+"name": &"[03] turning",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b22kr")
+}],
+"loop": false,
+"name": &"[04] launching",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}],
+"loop": true,
+"name": &"[05] jumping",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}],
+"loop": true,
+"name": &"[05ex] leaping",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}],
+"loop": true,
+"name": &"[05g] grabbing-jump",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}],
+"loop": true,
+"name": &"[06] falling",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}],
+"loop": true,
+"name": &"[07] crouching",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bx2o4")
+}],
+"loop": true,
+"name": &"[12] swimming",
+"speed": 17.0
+}]
+
+[node name="Sprite_Mole" instance=ExtResource("1_fxqja")]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_sxc57")
+animation = &"[01] walking"
+GlobalOffset = null

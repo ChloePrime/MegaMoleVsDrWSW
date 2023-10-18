@@ -1,0 +1,170 @@
+[gd_scene load_steps=21 format=3 uid="uid://u2d2b2jpxj2u"]
+
+[ext_resource type="Script" path="res://scripts/level/MaFoLevel.cs" id="1_l5r3y"]
+[ext_resource type="Resource" uid="uid://0spcwwwagtpi" path="res://tiles/R_object_tile_presets.tres" id="2_jpt0v"]
+[ext_resource type="Script" path="res://scripts/player/MaFoCamera.cs" id="3_7581p"]
+[ext_resource type="Script" path="res://scripts/level/MaFoLevelArea.cs" id="4_2ku5g"]
+[ext_resource type="PackedScene" uid="uid://bqhecjqjc5kim" path="res://objects/facility/O_spring.tscn" id="5_dkeot"]
+[ext_resource type="Script" path="res://levels/dr_wsw/spring_root.gd" id="5_p8j3n"]
+[ext_resource type="Texture2D" uid="uid://r7iss0c4y688" path="res://levels/dr_wsw/T_dr_wsw_geometry.png" id="7_isxli"]
+[ext_resource type="Script" path="res://scripts/level/PlayAreaChanger.cs" id="7_k2m28"]
+[ext_resource type="PackedScene" uid="uid://cfywv6a3w5n52" path="res://objects/O_mario.tscn" id="7_onxxa"]
+[ext_resource type="PackedScene" uid="uid://bqitl5d7835w3" path="res://levels/dr_wsw/dr_wsw_tiles.tscn" id="7_qbqdp"]
+[ext_resource type="Texture2D" uid="uid://biqga2hmgkx6h" path="res://levels/dr_wsw/T_arrow.png" id="9_fv6le"]
+[ext_resource type="PackedScene" uid="uid://enf4uda1bh7m" path="res://levels/dr_wsw/objects/O_wsw_capsule.tscn" id="9_lvca8"]
+[ext_resource type="Texture2D" uid="uid://dclbvpd2vejuc" path="res://levels/dr_wsw/T_dr_wsw_geometry_land.png" id="13_ii550"]
+
+[sub_resource type="Animation" id="Animation_7klnp"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spring Inner Root:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 64)]
+}
+
+[sub_resource type="Animation" id="Animation_dxyxw"]
+resource_name = "down"
+
+[sub_resource type="Animation" id="Animation_540ud"]
+resource_name = "up"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spring Inner Root:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5),
+"transitions": PackedFloat32Array(1, 0.5, 1),
+"update": 0,
+"values": [Vector2(0, 64), Vector2(0, 32), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fwwkh"]
+_data = {
+"RESET": SubResource("Animation_7klnp"),
+"down": SubResource("Animation_dxyxw"),
+"up": SubResource("Animation_540ud")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gvt06"]
+size = Vector2(640, 64)
+
+[sub_resource type="Animation" id="Animation_c04jo"]
+resource_name = "default"
+length = 0.2
+loop_mode = 1
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 16), Vector2(0, 1.90735e-06)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_otogq"]
+_data = {
+"default": SubResource("Animation_c04jo")
+}
+
+[node name="Level" type="Node2D" node_paths=PackedStringArray("DefaultArea")]
+script = ExtResource("1_l5r3y")
+LevelName = ""
+DefaultArea = NodePath("Overworld")
+TileLoadingPreset = ExtResource("2_jpt0v")
+
+[node name="MaFoCamera" type="Camera2D" parent="."]
+position = Vector2(320, 240)
+script = ExtResource("3_7581p")
+Border = Rect2(0, 0, 640, 480)
+
+[node name="Overworld" type="Node2D" parent="."]
+script = ExtResource("4_2ku5g")
+
+[node name="Spring Root" type="Node2D" parent="Overworld"]
+z_index = -1
+position = Vector2(320, 1712)
+script = ExtResource("5_p8j3n")
+
+[node name="Spring Inner Root" type="Node2D" parent="Overworld/Spring Root"]
+position = Vector2(0, 64)
+
+[node name="Spring L" parent="Overworld/Spring Root/Spring Inner Root" instance=ExtResource("5_dkeot")]
+position = Vector2(-240, 0)
+
+[node name="Spring R" parent="Overworld/Spring Root/Spring Inner Root" instance=ExtResource("5_dkeot")]
+position = Vector2(240, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Overworld/Spring Root"]
+libraries = {
+"": SubResource("AnimationLibrary_fwwkh")
+}
+
+[node name="Mario" parent="Overworld" instance=ExtResource("7_onxxa")]
+position = Vector2(184, 288)
+
+[node name="dr_wsw_tiles" parent="Overworld" instance=ExtResource("7_qbqdp")]
+
+[node name="PlayAreaChanger" type="Area2D" parent="Overworld"]
+position = Vector2(320, 512)
+collision_layer = 0
+collision_mask = 65536
+script = ExtResource("7_k2m28")
+PlayArea = Rect2(0, 480, 640, 1312)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Overworld/PlayAreaChanger"]
+shape = SubResource("RectangleShape2D_gvt06")
+
+[node name="PlayAreaChanger2" type="Area2D" parent="Overworld"]
+position = Vector2(320, 1752)
+collision_layer = 0
+collision_mask = 65536
+script = ExtResource("7_k2m28")
+PlayArea = Rect2(0, 1312, 640, 480)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Overworld/PlayAreaChanger2"]
+shape = SubResource("RectangleShape2D_gvt06")
+
+[node name="O_wsw_capsule" parent="Overworld" instance=ExtResource("9_lvca8")]
+position = Vector2(832, 1520)
+
+[node name="Arrow Root" type="Node2D" parent="Overworld"]
+position = Vector2(320, 352)
+
+[node name="Arrow" type="Sprite2D" parent="Overworld/Arrow Root"]
+position = Vector2(0, 9.53674e-07)
+texture = ExtResource("9_fv6le")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Overworld/Arrow Root"]
+root_node = NodePath("../Arrow")
+libraries = {
+"": SubResource("AnimationLibrary_otogq")
+}
+autoplay = "default"
+
+[node name="Geometry" type="Sprite2D" parent="."]
+z_index = -4000
+position = Vector2(320, 896)
+texture = ExtResource("7_isxli")
+
+[node name="Geometry Battlefield" type="Sprite2D" parent="."]
+position = Vector2(320, 1760)
+texture = ExtResource("13_ii550")
+
+[connection signal="body_entered" from="Overworld/PlayAreaChanger2" to="Overworld/O_wsw_capsule" method="OnPlayAreaChanger2BodyEntered"]
+[connection signal="BattlePhase2Started" from="Overworld/O_wsw_capsule" to="Overworld/Spring Root" method="_on_o_wsw_capsule_battle_phase_2_started"]

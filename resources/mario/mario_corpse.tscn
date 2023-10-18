@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://bh4e0so120x3n"]
+
+[ext_resource type="Texture2D" uid="uid://co35iqkb563hw" path="res://resources/enemies/T_mole_jumping.png" id="1_x0mhv"]
+[ext_resource type="Script" path="res://scripts/player/MarioCorpse.cs" id="2_dy18b"]
+[ext_resource type="AudioStream" uid="uid://dqmafju6sqf6u" path="res://resources/mario/SE_die.wav" id="3_rvya6"]
+
+[node name="Mario Corpse" type="Sprite2D"]
+z_index = 100
+texture = ExtResource("1_x0mhv")
+offset = Vector2(0, -16)
+flip_v = true
+script = ExtResource("2_dy18b")
+
+[node name="Start Move Timer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.5
+one_shot = true
+autostart = true
+
+[node name="Restart Level Timer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 4.0
+one_shot = true
+autostart = true
+
+[node name="The Funny Sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_rvya6")
+autoplay = true

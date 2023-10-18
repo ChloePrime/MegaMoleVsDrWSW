@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://bwpwlhnv8njmh"]
+
+[ext_resource type="Texture2D" uid="uid://cviwy4l4ux1rp" path="res://levels/dr_wsw/objects/T_little_rock.png" id="1_102oc"]
+[ext_resource type="Script" path="res://scripts/util/helper_nodes/Rotator2D.cs" id="2_nbrek"]
+[ext_resource type="Script" path="res://levels/dr_wsw/scripts/MoleRock.cs" id="3_sirn2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_eront"]
+
+[node name="O_little_rock_mole" type="Area2D"]
+collision_layer = 0
+collision_mask = 131072
+script = ExtResource("3_sirn2")
+XSpeed = 600.0
+
+[node name="Sprite Root" type="Node2D" parent="."]
+z_index = 1
+
+[node name="Sprite" type="Sprite2D" parent="Sprite Root"]
+position = Vector2(0, -3)
+texture = ExtResource("1_102oc")
+
+[node name="Rotator" type="Node" parent="Sprite Root"]
+script = ExtResource("2_nbrek")
+Cycle = 0.2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_eront")
+
+[node name="VisibleOnScreenNotifier" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier" to="." method="queue_free"]
