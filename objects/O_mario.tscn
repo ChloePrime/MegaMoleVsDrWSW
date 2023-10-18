@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://cfywv6a3w5n52"]
+[gd_scene load_steps=79 format=3 uid="uid://cfywv6a3w5n52"]
 
 [ext_resource type="Script" path="res://scripts/player/Mario.cs" id="1_slc8u"]
 [ext_resource type="Resource" uid="uid://2dq2dosvv7hb" path="res://resources/mario/status_small.tres" id="2_4vo13"]
@@ -11,6 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://d1hl8pya43a0d" path="res://resources/mario/SE_swim.wav" id="5_e7o5n"]
 [ext_resource type="Resource" uid="uid://bodhgx6bdjudy" path="res://resources/mario/status_chloe_3d.tres" id="5_v43mo"]
 [ext_resource type="Resource" uid="uid://qn1xmdeydojg" path="res://resources/mario/status_mole.tres" id="6_j5704"]
+[ext_resource type="AudioStream" uid="uid://du2ccw5uq1l5j" path="res://levels/dr_wsw/SE_megaman_hurt.wav" id="7_ja84j"]
 [ext_resource type="AudioStream" uid="uid://4yo63sgji6p3" path="res://resources/mario/SE_hurt.wav" id="7_oqh4d"]
 [ext_resource type="Material" uid="uid://myh55fdcpwtl" path="res://resources/mario/M_mario_main.tres" id="7_pl8do"]
 [ext_resource type="Script" path="res://scripts/player/MarioGrabMuzzle.cs" id="9_ug04s"]
@@ -416,6 +417,8 @@ StatusList = Array[Resource]([ExtResource("2_4vo13"), ExtResource("3_60q2k"), Ex
 MuzzleBySize = [NodePath("SpriteRoot/Muzzle (Crouching)"), NodePath("SpriteRoot/Muzzle"), NodePath("SpriteRoot/Muzzle (Crouching)")]
 GrabMuzzleBySize = [NodePath("SpriteRoot/Grab Muzzle (Small)"), NodePath("SpriteRoot/Grab Muzzle (Big)"), NodePath("SpriteRoot/Grab Muzzle (Small)")]
 StatusSpriteNodeList = [NodePath("SpriteRoot/Sprite_Small")]
+HitPointHurtVoice = ExtResource("7_ja84j")
+HitPointSevereHurtVoice = ExtResource("7_ja84j")
 
 [node name="Collision_Big" type="CollisionShape2D" parent="."]
 position = Vector2(0, -26)
