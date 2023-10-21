@@ -19,7 +19,7 @@ public partial class WswCapsuleHurtDetector : EnemyHurtDetector
         base._Ready();
         this.GetNode(out _customHurtPlayer, NpCustomHurtPlayer);
         RootWswCapsule = (WswCapsule)Core.Root;
-        RootWswCapsule.BattlePhase2Started += () => _invulnerable = false;
+        RootWswCapsule.BattlePhase2Started += OnInvulnerableEnds;
         _bossBar = (this.GetLevelManager() as LevelFrame)?.Hud.MegaManBossHpBar;
     }
 

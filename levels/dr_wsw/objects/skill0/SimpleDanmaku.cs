@@ -2,7 +2,7 @@ using Godot;
 
 namespace MegaMoleVsDrWsw;
 
-public partial class SimpleDanmaku : StaticBody2D
+public partial class SimpleDanmaku : Node2D
 {
 	[Export] public Vector2 Velocity { get; set; }
 

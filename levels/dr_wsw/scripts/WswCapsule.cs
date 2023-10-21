@@ -6,6 +6,7 @@ using ChloePrime.MarioForever.Level;
 using ChloePrime.MarioForever.Player;
 using ChloePrime.MarioForever.UI;
 using ChloePrime.MarioForever.Util;
+using ChloePrime.MarioForever.Util.HelperNodes;
 using Godot;
 using MegaMoleVsDrWsw;
 using MixelTools.Util.Extensions;
@@ -39,6 +40,7 @@ public partial class WswCapsule : Node2D
     private static readonly float Skill1MagnetSpeedEnhanced = Units.Speed.CtfToGd(8);
     private static readonly PackedScene Skill1MagnetPrefab;
     private static readonly AudioStream Skill1MagnetSound;
+    private static readonly PackedScene Skill100MoleStickPrefab;
     
     private static readonly PackedScene MediumExplosion;
 
@@ -49,6 +51,7 @@ public partial class WswCapsule : Node2D
         NodeEx.Load(out Skill1MagnetPrefab, "res://levels/dr_wsw/objects/skill1/O_wsw_skill1_magnet.tscn");
         NodeEx.Load(out Skill1MagnetSound, "res://levels/dr_wsw/objects/skill1/SE_gear.ogg");
         NodeEx.Load(out MediumExplosion, "res://objects/effect/O_explosion_m_megaman_with_sound.tscn");
+        NodeEx.Load(out Skill100MoleStickPrefab, "res://levels/dr_wsw/objects/skill100/O_mole_stick.tscn");
     }
 
     [Signal] public delegate void BattlePhase1StartedEventHandler();
@@ -151,8 +154,12 @@ public partial class WswCapsule : Node2D
         base._Ready();
         this.GetNode(out _animation, "Animation Player");
         this.GetNode(out _frontMuzzle, "Front Muzzle");
+        this.GetNode(out _jetMuzzle, "Jet Muzzle");
+        this.GetNode(out _moleStickMuzzle, "Mole Stick Muzzle");
+        this.GetNode(out _jetSmokeTimer, "Jet Smoke Timer");
         this.GetNode(out _core, "Enemy Core");
         _hpBar = (this.GetLevelManager() as LevelFrame)?.Hud.MegaManBossHpBar;
+        _jetSmokeTimer.Timeout += OnJetSmokeTimerTimeout;
 
         if (BackgroundMusic.Music == Music)
         {
@@ -185,6 +192,9 @@ public partial class WswCapsule : Node2D
             case Phase.BattlePhase1:
                 ProcessBattlePhase1();
                 break;
+            case Phase.BattlePhase2:
+                ProcessBattlePhase2();
+                break;
         }
     }
 
@@ -200,11 +210,11 @@ public partial class WswCapsule : Node2D
         {
             case 0:
                 // 发射弹幕
-                ProcessSKill0();
+                ProcessSkill0();
                 break;
             case 1:
                 // 发射磁铁
-                ProcessSKill1();
+                ProcessSkill1();
                 break;
         }
     }
@@ -246,7 +256,7 @@ public partial class WswCapsule : Node2D
         }
     }
 
-    private void ProcessSKill0()
+    private void ProcessSkill0()
     {
         switch (_skillPhase)
         {
@@ -333,7 +343,7 @@ public partial class WswCapsule : Node2D
 
     #region 技能1: 磁铁攻击
 
-    private void ProcessSKill1()
+    private void ProcessSkill1()
     {
         switch (_skillPhase)
         {
@@ -376,7 +386,7 @@ public partial class WswCapsule : Node2D
                     MoveTowardsY(
                         targetY,
                         isLast ? delay2 : delay,
-                        Tween.TransitionType.Cubic, Tween.EaseType.InOut,
+                        Tween.TransitionType.Quad, Tween.EaseType.InOut,
                         isLast ? null : Shoot
                     );
                 }
@@ -421,6 +431,8 @@ public partial class WswCapsule : Node2D
             t.Dispose();
         }
         _tweens.Clear();
+
+        _jetSmokeTimer.Start();
         
         if (GetTree().GetFirstNodeInGroup(MaFo.Groups.Player) is Mario mario)
         {
@@ -442,6 +454,16 @@ public partial class WswCapsule : Node2D
         CreateTween().SetLoops(explosionTimes - 1)
             .TweenCallback(Callable.From(CreateMediumExplosion)).SetDelay(moveDuration / explosionTimes);
     }
+
+    private static readonly PackedScene JetSmokePrefab = GD.Load<PackedScene>("res://objects/effect/O_smoke_m.tscn");
+
+    private void OnJetSmokeTimerTimeout()
+    {
+        const float smokeSpeed = 200;
+        var smoke = JetSmokePrefab.Instantiate<SelfDestroyingBetterAnimatedEffect>();
+        smoke.Velocity = smokeSpeed * new Vector2(1, -1);
+        _jetMuzzle.AddChild(smoke);
+    }
     
     private void CreateMediumExplosion()
     {
@@ -460,6 +482,60 @@ public partial class WswCapsule : Node2D
     }
 
     #endregion
+
+    #region 阶段2：投掷反地鼠大棒
+
+    private void ProcessBattlePhase2()
+    {
+        if (_skill != 100)
+        {
+            _skill = 100;
+            _skillPhase = 0;
+            InitPhase2Movement();
+        }
+        ProcessSkill100();
+    }
+
+    private void InitPhase2Movement()
+    {
+        var center = this.GetFrame().GetCenter();
+        
+        void MoveUp() => MoveTowardsY(
+            center.Y - 192, 5,
+            Tween.TransitionType.Quad, Tween.EaseType.InOut,
+            MoveDown
+        );
+
+        void MoveDown() => MoveTowardsY(
+            center.Y + 96, 5,
+            Tween.TransitionType.Quad, Tween.EaseType.InOut,
+            MoveUp
+        );
+        
+        MoveUp();
+    }
+    
+    private void ProcessSkill100()
+    {
+        switch (_skillPhase)
+        {
+            case 0:
+                CreateMoleStick();
+                _skillPhase = 1;
+                SkillWaitFor(1);
+                break;
+            case 2:
+                break;
+        }
+    }
+
+    private void CreateMoleStick()
+    {
+        var stick = _moleStick = Skill100MoleStickPrefab.Instantiate<SimpleDanmaku>();
+        _moleStickMuzzle.AddChild(stick);
+    }
+
+    #endregion 
 
     private void RandomizeDirection()
     {
@@ -502,6 +578,10 @@ public partial class WswCapsule : Node2D
     private AnimationPlayer _animation;
     private EnemyCore _core;
     private Node2D _frontMuzzle;
+    private Node2D _jetMuzzle;
+    private Node2D _moleStickMuzzle;
+    private Timer _jetSmokeTimer;
+    private SimpleDanmaku _moleStick;
     private bool _activated;
     private Phase _phase = Phase.Deactivated;
     private int _skill = -1;

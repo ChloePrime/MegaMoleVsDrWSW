@@ -11,6 +11,7 @@ public partial class Rotator2D : Node
 	
 	private Node2D _parent;
 	private bool _valid;
+	
 	public override void _Ready()
 	{
 		_parent = GetParent() as Node2D;
