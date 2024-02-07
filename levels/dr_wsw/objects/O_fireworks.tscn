@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbm7ebw3xnt1w"]
+
+[ext_resource type="Script" path="res://levels/dr_wsw/objects/fireworks.gd" id="1_2lp1l"]
+[ext_resource type="PackedScene" uid="uid://c53bmkfkcjj55" path="res://levels/dr_wsw/objects/O_fireworks_piece.tscn" id="2_nhliq"]
+
+[node name="Fireworks" type="Node2D"]
+z_index = 100
+script = ExtResource("1_2lp1l")
+layer_0_speed = 200.0
+layer_1_speed = 300.0
+
+[node name="00" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.977297
+
+[node name="01" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+
+[node name="02" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+Velocity = Vector2(0, -400)
+
+[node name="03" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+Velocity = Vector2(0, 400)
+
+[node name="04" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.72273
+
+[node name="05" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+
+[node name="06" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+Velocity = Vector2(0, -400)
+
+[node name="07" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+Velocity = Vector2(0, 400)
+
+[node name="10" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.70418
+
+[node name="11" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+
+[node name="12" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+Velocity = Vector2(0, -400)
+
+[node name="13" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+Velocity = Vector2(0, 400)
+
+[node name="14" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.70418
+
+[node name="15" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+
+[node name="16" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+Velocity = Vector2(0, -400)
+
+[node name="17" parent="." instance=ExtResource("2_nhliq")]
+frame_progress = 0.698887
+Velocity = Vector2(0, 400)
+
+[connection signal="child_exiting_tree" from="." to="." method="_on_child_exiting_tree"]

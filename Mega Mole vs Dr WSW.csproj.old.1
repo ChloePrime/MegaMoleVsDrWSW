@@ -1,16 +1,11 @@
-<Project Sdk="Godot.NET.Sdk/4.3.0-dev.2">
+<Project Sdk="Godot.NET.Sdk/4.2.0-beta.1">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>ChloePrime.MarioForever</RootNamespace>
-    <!-- Use NativeAOT. -->
-    <PublishAOT>true</PublishAOT>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DotNext" Version="4.13.1" />
-    <!-- Root the assemblies to avoid trimming. -->
-    <TrimmerRootAssembly Include="GodotSharp" />
-    <TrimmerRootAssembly Include="$(TargetName)" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.md" />

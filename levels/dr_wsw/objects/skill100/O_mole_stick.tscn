@@ -10,7 +10,8 @@ radius = 16.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_dmama"]
 radius = 7.0
 
-[node name="Mole Stick" type="StaticBody2D"]
+[node name="Mole Stick" type="StaticBody2D" groups=["projectiles"]]
+z_index = 1
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_hetrd")
@@ -24,14 +25,15 @@ texture = ExtResource("2_88u8x")
 
 [node name="Hitbox" type="StaticBody2D" parent="Sprite Root"]
 position = Vector2(0, -96)
+collision_layer = 256
+collision_mask = 0
 
 [node name="Shape" type="CollisionShape2D" parent="Sprite Root/Hitbox"]
 shape = SubResource("CircleShape2D_th44x")
 
 [node name="Rotator" type="Node" parent="Sprite Root"]
-process_mode = 4
 script = ExtResource("3_2yxhy")
-Cycle = -1.5
+Cycle = -1.2
 
 [node name="Collision Shape" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_dmama")

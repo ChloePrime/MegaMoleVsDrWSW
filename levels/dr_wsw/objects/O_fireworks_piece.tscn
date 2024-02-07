@@ -1,0 +1,56 @@
+[gd_scene load_steps=9 format=3 uid="uid://c53bmkfkcjj55"]
+
+[ext_resource type="Script" path="res://levels/dr_wsw/objects/skill0/SimpleDanmaku.cs" id="1_k811i"]
+[ext_resource type="Texture2D" uid="uid://b31nttmr17c3o" path="res://resources/effect/T_explosion_s_megaman.png" id="1_r1lld"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sbv80"]
+atlas = ExtResource("1_r1lld")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jrw61"]
+atlas = ExtResource("1_r1lld")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qm5d2"]
+atlas = ExtResource("1_r1lld")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_of7b0"]
+atlas = ExtResource("1_r1lld")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6n2ak"]
+atlas = ExtResource("1_r1lld")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p6e5n"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sbv80")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jrw61")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qm5d2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_of7b0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6n2ak")
+}],
+"loop": true,
+"name": &"default",
+"speed": 25.0
+}]
+
+[node name="Fireworks Piece" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_p6e5n")
+autoplay = "default"
+script = ExtResource("1_k811i")
+
+[node name="VisibleOnScreenNotifier" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier" to="." method="queue_free"]

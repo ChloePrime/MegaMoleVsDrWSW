@@ -23,6 +23,7 @@
 using Godot;
 using Godot.Collections;
 
+#if TOOLS
 [Tool]
 public partial class Importer: EditorImportPlugin
 {
@@ -143,3 +144,4 @@ public partial class Importer: EditorImportPlugin
         return ret;
     }
 }
+#endif

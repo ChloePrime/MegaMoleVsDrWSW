@@ -78,7 +78,7 @@ public partial class WswCapsuleHurtDetector : EnemyHurtDetector
                 PlayHurtSound(e);
                 return true;
             case BattlePhase2:
-                base.Kill(e);
+                RootWswCapsule.CallDeferred(WswCapsule.MethodName.RaiseFireworks);
                 return true;
             default:
                 return false;

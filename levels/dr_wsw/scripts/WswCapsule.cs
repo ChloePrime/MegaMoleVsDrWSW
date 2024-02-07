@@ -7,6 +7,7 @@ using ChloePrime.MarioForever.Player;
 using ChloePrime.MarioForever.UI;
 using ChloePrime.MarioForever.Util;
 using ChloePrime.MarioForever.Util.HelperNodes;
+using DotNext.Collections.Generic;
 using Godot;
 using MegaMoleVsDrWsw;
 using MixelTools.Util.Extensions;
@@ -40,7 +41,12 @@ public partial class WswCapsule : Node2D
     private static readonly float Skill1MagnetSpeedEnhanced = Units.Speed.CtfToGd(8);
     private static readonly PackedScene Skill1MagnetPrefab;
     private static readonly AudioStream Skill1MagnetSound;
+    private static readonly float Skill100MoleStickSpeed = Units.Speed.CtfToGd(2);
     private static readonly PackedScene Skill100MoleStickPrefab;
+    private static readonly AudioStream Skill100ThrowSound;
+    private static readonly PackedScene FireworksPrefab;
+    private static readonly AudioStream FireworksSound;
+    private static readonly PackedScene WswCorpsePrefab;
     
     private static readonly PackedScene MediumExplosion;
 
@@ -52,6 +58,10 @@ public partial class WswCapsule : Node2D
         NodeEx.Load(out Skill1MagnetSound, "res://levels/dr_wsw/objects/skill1/SE_gear.ogg");
         NodeEx.Load(out MediumExplosion, "res://objects/effect/O_explosion_m_megaman_with_sound.tscn");
         NodeEx.Load(out Skill100MoleStickPrefab, "res://levels/dr_wsw/objects/skill100/O_mole_stick.tscn");
+        NodeEx.Load(out Skill100ThrowSound, "res://levels/dr_wsw/objects/skill100/SE_hammer.ogg");
+        NodeEx.Load(out FireworksPrefab, "res://levels/dr_wsw/objects/O_fireworks.tscn");
+        NodeEx.Load(out FireworksSound, "res://levels/dr_wsw/objects/skill100/SE_megaman_fireworks.wav");
+        NodeEx.Load(out WswCorpsePrefab, "res://levels/dr_wsw/objects/O_wsw_corpse.tscn");
     }
 
     [Signal] public delegate void BattlePhase1StartedEventHandler();
@@ -153,6 +163,7 @@ public partial class WswCapsule : Node2D
     {
         base._Ready();
         this.GetNode(out _animation, "Animation Player");
+        this.GetNode(out _wswRoot, "WSW Root");
         this.GetNode(out _frontMuzzle, "Front Muzzle");
         this.GetNode(out _jetMuzzle, "Jet Muzzle");
         this.GetNode(out _moleStickMuzzle, "Mole Stick Muzzle");
@@ -321,15 +332,14 @@ public partial class WswCapsule : Node2D
         var look = (mario.GlobalPosition - new Vector2(0, 16) - _frontMuzzle.GlobalPosition).Angle();
         var parent = this.GetPreferredRoot();
 
-        var dir = look - spread * (count - 1) * 0.5F;
+        var dir = look - spread * (count - 1) * 0.5F + (float)GD.RandRange(-Skill0DanmakuSpread, Skill0DanmakuSpread);
         for (int i = 0; i < count; i++)
         {
             var danmaku = Skill0DanmakuPrefab.Instantiate<SimpleDanmaku>();
             parent.AddChild(danmaku);
             danmaku.GlobalPosition = _frontMuzzle.GlobalPosition;
-            danmaku.Velocity =
-                Vector2.Right.Rotated(dir + (float)GD.RandRange(-Skill0DanmakuSpread, Skill0DanmakuSpread)) *
-                (enhanced ? Skill0DanmakuSpeedEnhanced : Skill0DanmakuSpeed);
+            danmaku.Velocity = Vector2.Right.Rotated(dir) *
+                               (enhanced ? Skill0DanmakuSpeedEnhanced : Skill0DanmakuSpeed);
             dir += spread;
         }
 
@@ -407,7 +417,7 @@ public partial class WswCapsule : Node2D
 
     private void ShootMagnet(bool enhanced)
     {
-        if (GetTree().GetFirstNodeInGroup(MaFo.Groups.Player) is not Mario mario) return;
+        if (GetTree().GetFirstNodeInGroup(MaFo.Groups.Player) is not Mario) return;
 
         var parent = this.GetPreferredRoot();
         var magnet = Skill1MagnetPrefab.Instantiate<WswMagnet>();
@@ -425,13 +435,8 @@ public partial class WswCapsule : Node2D
 
     public void BattleBreak()
     {
-        foreach (var t in _tweens)
-        {
-            t.Stop();
-            t.Dispose();
-        }
-        _tweens.Clear();
-
+        ClearTrackedTween();
+        ClearProjectiles();
         _jetSmokeTimer.Start();
         
         if (GetTree().GetFirstNodeInGroup(MaFo.Groups.Player) is Mario mario)
@@ -520,11 +525,21 @@ public partial class WswCapsule : Node2D
         switch (_skillPhase)
         {
             case 0:
-                CreateMoleStick();
                 _skillPhase = 1;
-                SkillWaitFor(1);
+                SkillWaitFor(0.5F);
                 break;
             case 2:
+                CreateMoleStick();
+                _skillPhase = 3;
+                SkillWaitFor(1);
+                break;
+            case 4:
+                ThrowMoleStick();
+                _skillPhase = 5;
+                SkillWaitFor(2);
+                break;
+            case 6:
+                _skillPhase = 2;
                 break;
         }
     }
@@ -532,10 +547,70 @@ public partial class WswCapsule : Node2D
     private void CreateMoleStick()
     {
         var stick = _moleStick = Skill100MoleStickPrefab.Instantiate<SimpleDanmaku>();
+        stick.ProcessMode = ProcessModeEnum.Disabled;
         _moleStickMuzzle.AddChild(stick);
     }
 
-    #endregion 
+    private void ThrowMoleStick()
+    {
+        if (GetTree().GetFirstNodeInGroup(MaFo.Groups.Player) is not Mario mario) return;
+        if (_moleStick is not {} moleStick) return;
+        
+        Skill100ThrowSound?.Play();
+
+        var look = (mario.GlobalPosition - new Vector2(0, 16) - _moleStickMuzzle.GlobalPosition).Angle();
+        var parent = this.GetPreferredRoot();
+        
+        moleStick.Reparent(parent);
+        moleStick.Velocity = Vector2.Right.Rotated(look) * Skill100MoleStickSpeed;
+        moleStick.ProcessMode = ProcessModeEnum.Inherit;
+        moleStick.GetNode<Rotator2D>(NpMoleStickRotator).Cycle *= _pmOne;
+        _pmOne *= -1;
+        
+        _moleStick = null;
+    }
+
+    private static readonly NodePath NpMoleStickRotator = "Sprite Root/Rotator";
+
+    #endregion
+
+    public void RaiseFireworks()
+    {
+        ClearTrackedTween();
+        ClearProjectiles();
+        var root = this.GetPreferredRoot();
+
+        var corpse = WswCorpsePrefab.Instantiate<Node2D>();
+        root.AddChild(corpse);
+        corpse.GlobalPosition = _wswRoot.GlobalPosition;
+        
+        _wswRoot.Reparent(corpse);
+        _wswRoot.Position = Vector2.Zero;
+        
+        var fireworks = FireworksPrefab.Instantiate<Node2D>();
+        this.GetPreferredRoot().AddChild(fireworks);
+        fireworks.GlobalPosition = GlobalPosition;
+        BackgroundMusic.Stop();
+        FireworksSound?.Play();
+
+        _hpBar?.Hide();
+        QueueFree();
+    }
+    
+    private void ClearTrackedTween()
+    {
+        foreach (var t in _tweens)
+        {
+            t.Stop();
+            t.Dispose();
+        }
+        _tweens.Clear();
+    }
+
+    private void ClearProjectiles()
+    {
+        GetTree().GetNodesInGroup("projectiles").ForEach(p => p.QueueFree());
+    }
 
     private void RandomizeDirection()
     {
@@ -545,7 +620,7 @@ public partial class WswCapsule : Node2D
         }
         else
         {
-            _dir = (int)(GD.Randi() & 2) - 1;
+            _dir = unchecked((int)(GD.Randi() & 2)) - 1;
         }
         Scale = Scale with { X = _dir };
     }
@@ -577,6 +652,7 @@ public partial class WswCapsule : Node2D
     private MegaManHpBar _hpBar;
     private AnimationPlayer _animation;
     private EnemyCore _core;
+    private Node2D _wswRoot;
     private Node2D _frontMuzzle;
     private Node2D _jetMuzzle;
     private Node2D _moleStickMuzzle;
@@ -588,4 +664,5 @@ public partial class WswCapsule : Node2D
     private int _skillPhase;
     private int _dir;
     private int _skillCount;
+    private int _pmOne = 1;
 }

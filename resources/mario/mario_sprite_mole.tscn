@@ -153,4 +153,4 @@ animations = [{
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_sxc57")
 animation = &"[01] walking"
-GlobalOffset = null
+GlobalOffset = Vector2(0, 0)

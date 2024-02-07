@@ -88,6 +88,15 @@ LevelName = ""
 DefaultArea = NodePath("Overworld")
 TileLoadingPreset = ExtResource("2_jpt0v")
 
+[node name="Geometry" type="Sprite2D" parent="."]
+z_index = -4000
+position = Vector2(320, 896)
+texture = ExtResource("7_isxli")
+
+[node name="Geometry Battlefield" type="Sprite2D" parent="."]
+position = Vector2(320, 1760)
+texture = ExtResource("13_ii550")
+
 [node name="MaFoCamera" type="Camera2D" parent="."]
 position = Vector2(320, 240)
 script = ExtResource("3_7581p")
@@ -115,8 +124,12 @@ libraries = {
 "": SubResource("AnimationLibrary_fwwkh")
 }
 
-[node name="Mario" parent="Overworld" instance=ExtResource("7_onxxa")]
+[node name="Mario" parent="Overworld" node_paths=PackedStringArray("CollisionBySize", "MuzzleBySize", "GrabMuzzleBySize", "StatusSpriteNodeList") instance=ExtResource("7_onxxa")]
 position = Vector2(184, 288)
+CollisionBySize = [NodePath("Collision_Small"), NodePath("Collision_Big"), NodePath("Collision_Mini")]
+MuzzleBySize = [NodePath("SpriteRoot/Muzzle (Crouching)"), NodePath("SpriteRoot/Muzzle"), NodePath("SpriteRoot/Muzzle (Crouching)")]
+GrabMuzzleBySize = [NodePath("SpriteRoot/Grab Muzzle (Small)"), NodePath("SpriteRoot/Grab Muzzle (Big)"), NodePath("SpriteRoot/Grab Muzzle (Small)")]
+StatusSpriteNodeList = [NodePath("SpriteRoot/Sprite_Small")]
 
 [node name="dr_wsw_tiles" parent="Overworld" instance=ExtResource("7_qbqdp")]
 
@@ -156,15 +169,6 @@ libraries = {
 "": SubResource("AnimationLibrary_otogq")
 }
 autoplay = "default"
-
-[node name="Geometry" type="Sprite2D" parent="."]
-z_index = -4000
-position = Vector2(320, 896)
-texture = ExtResource("7_isxli")
-
-[node name="Geometry Battlefield" type="Sprite2D" parent="."]
-position = Vector2(320, 1760)
-texture = ExtResource("13_ii550")
 
 [connection signal="body_entered" from="Overworld/PlayAreaChanger2" to="Overworld/O_wsw_capsule" method="OnPlayAreaChanger2BodyEntered"]
 [connection signal="BattlePhase2Started" from="Overworld/O_wsw_capsule" to="Overworld/Spring Root" method="_on_o_wsw_capsule_battle_phase_2_started"]

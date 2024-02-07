@@ -12,8 +12,8 @@ config_version=5
 
 config/name="Mega Mole vs Dr WSW"
 run/main_scene="res://objects/O_level_frame.tscn"
-config/features=PackedStringArray("4.2", "C#", "Forward Plus")
-config/icon="res://icon.svg"
+config/features=PackedStringArray("4.3", "C#", "Forward Plus")
+config/icon="res://resources/enemies/T_mole_jumping.png"
 
 [audio]
 
@@ -29,7 +29,7 @@ window/size/viewport_width=640
 window/size/viewport_height=480
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
-window/vsync/vsync_mode=0
+window/vsync/vsync_mode=2
 window/run_on_separate_thread=true
 window/snap/snap_2d_vertices_to_pixel=true
 

@@ -64,6 +64,7 @@ stretch = true
 own_world_3d = true
 handle_input_locally = false
 snap_2d_vertices_to_pixel = true
+canvas_item_default_texture_filter = 3
 size = Vector2i(1920, 1440)
 size_2d_override = Vector2i(640, 480)
 size_2d_override_stretch = true
@@ -148,6 +149,7 @@ grow_vertical = 0
 mouse_filter = 2
 
 [node name="Image" type="TextureRect" parent="Frame Anime/L"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -175,6 +177,7 @@ grow_horizontal = 0
 mouse_filter = 2
 
 [node name="Image" type="TextureRect" parent="Frame Anime/R"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -194,4 +197,3 @@ stretch_mode = 6
 
 [node name="Debug Cheater" type="Node" parent="."]
 script = ExtResource("6_sxgtr")
-Enabled = null

@@ -5,7 +5,12 @@ using Godot;
 
 namespace ChloePrime.MarioForever.Util;
 
-public static class SoundUtil
+public partial class SoundUtil : Node
+{
+    public static void Play(AudioStream? sound) => sound.Play();
+}
+
+public static class SoundUtilEx
 {
     private const int MaxPooledPlayers = 64;
 
